@@ -37,15 +37,21 @@ def print_CPL_icemask_areas(ds,
     xgIceMask = ds[fldname_xg].squeeze()
     xlIceMask = ds[fldname_xl].squeeze()
     
-    print('CPL-G, :', (xgIceMask.to_masked_array() * glc_area_km.values).sum())
-    print('CPL-L, :', (xlIceMask.to_masked_array() * lnd_area_km.values).sum())
+    tot_cplg = (xgIceMask.to_masked_array() * glc_area_km.values).sum()
+    tot_cpll = (xlIceMask.to_masked_array() * lnd_area_km.values).sum()
+    print('CPL-G, :', tot_cplg)
+    print('CPL-L, :', tot_cpll) 
+    print('ratio CPL-L / CPL-G :', tot_cpll/tot_cplg)
 
     
 def print_CPL_glaciercover_areas(ds,
                             area_xg='domg_aream', area_xl='doml_aream',
                             fldname_xg='g2x_Sg_ice_covered', fldname_xl='x2l_Sg_ice_covered'):
     """
-    TODO: NOT IMPLEMENTED
+    given a coupler history file, opened as Xarray dataset, 
+    print both the LAND and GLC glacier cover extent in km^2
+    
+    By default, take the cell area from the mapping file
     """
     glc_area = ds[area_xg].squeeze()
     lnd_area = ds[area_xl].squeeze()
@@ -65,5 +71,8 @@ def print_CPL_glaciercover_areas(ds,
         varname = varname_pattern.format(ec=i)
         xlIceCov += ds[varname].squeeze().to_masked_array()
         
-    print('CPL-G, :', (xgIceCov.to_masked_array() * glc_area_km.values).sum())
-    print('CPL-L, :', (xlIceCov * lnd_area_km.values).sum())
+    tot_cplg = (xgIceCov.to_masked_array() * glc_area_km.values).sum()
+    tot_cpll = (xlIceCov * lnd_area_km.values).sum()
+    print('CPL-G, :', tot_cplg)
+    print('CPL-L, :', tot_cpll)
+    print('ratio CPL-L / CPL-G :', tot_cpll/tot_cplg)
